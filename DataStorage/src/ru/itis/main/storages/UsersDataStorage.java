@@ -24,13 +24,8 @@ public class UsersDataStorage {
     public int save(User user) {
         try {
             user.setId(idGenerator.generateId());
-            /*
-            FileOutputStream outputStream =
-                    new FileOutputStream(fileName, true);
-            */
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
             String userDataAsString = user.toString();
-            //byte userDataAsBytes[] = (userDataAsString + '\n').getBytes();
             writer.write(userDataAsString);
             writer.newLine();
             writer.close();
