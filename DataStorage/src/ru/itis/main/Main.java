@@ -24,5 +24,6 @@ public class Main {
         //User forUpdate = new User("maksim", "qwerty10", "Maksim", 99);
         //forUpdate.setId(13);
         //usersDataStorage.update(forUpdate);
+        //System.out.println(usersDataStorage.find(34));
     }
 }

@@ -1,6 +1,7 @@
 package ru.itis.main.storages;
 
 import ru.itis.main.generators.IdGenerator;
+import ru.itis.main.generators.SingletonIdGenerator;
 import ru.itis.main.models.Auto;
 
 import java.io.*;
@@ -12,16 +13,14 @@ import java.util.Random;
 public class AutoDataStorage {
 
     private String fileName;
-    private IdGenerator idGenerator;
 
-    public AutoDataStorage(String fileName, IdGenerator idGenerator) {
+    public AutoDataStorage(String fileName) {
         this.fileName = fileName;
-        this.idGenerator = idGenerator;
     }
 
     public int save(Auto auto) {
         try {
-            auto.setId(idGenerator.generateId());
+            auto.setId(SingletonIdGenerator.getGenerator().generateId());
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
             String autoDataAsString = auto.toString();
             writer.write(autoDataAsString);
@@ -117,7 +116,7 @@ public class AutoDataStorage {
     public void update(Auto auto) {
         int idToUpdate = auto.getId();
         List<Auto> updateList = findAll();
-        for (int i=0;i<updateList.size();i++){
+        for (int i = 0; i < updateList.size(); i++){
             if ((updateList.get(i)).getId() == idToUpdate){
                 updateList.set(i, auto);
                 break;
