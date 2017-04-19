@@ -3,7 +3,6 @@ package ru.itis.main.storages;
 import org.junit.Before;
 import org.junit.Test;
 import ru.itis.main.exceptions.UserNotFoundException;
-import ru.itis.main.generators.IdGenerator;
 import ru.itis.main.models.User;
 
 import static org.junit.Assert.*;
@@ -17,8 +16,6 @@ public class UsersDataStorageTest {
     @Before // Before - говорит JUnit-у о том, что этот метод
     // нужно вызывать перед каждым тестом
     public void setUp() throws Exception {
-        this.usersDataStorage = new UsersDataStorage("test\\users.txt",
-                new IdGenerator("test\\id.txt"));
     }
 
     @Test // Test - говорит JUnit-у, что данный метод является методом-тестом

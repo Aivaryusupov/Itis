@@ -78,8 +78,6 @@ public class UsersDataStorage {
 
     public List<User> findAll() {
         ArrayList<User> allUsers = new ArrayList<>();
-        // TODO: реализовать чтение всех пользователей из файла
-        // и добавление их в список
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
 
@@ -133,10 +131,6 @@ public class UsersDataStorage {
         flushFromBuffer(buffer);
     }
 
-    /**
-     * Обновление записи в хранилище
-     * @param user новые данные пользователя. id - там уже указан
-     */
     public void update(User user) {
         int idToUpdate = user.getId();
         List<User> updateList = findAll();
