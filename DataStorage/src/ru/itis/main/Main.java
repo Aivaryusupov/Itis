@@ -7,5 +7,6 @@ public class Main {
 
     public static void main(String[] args) {
         UsersDataStorage storage = DataStorageFactory.getUsersDataStorage();
+        AutoDataStorage autosStorage = DataStorageFactory.getAutoDataStorage();
     }
 }
