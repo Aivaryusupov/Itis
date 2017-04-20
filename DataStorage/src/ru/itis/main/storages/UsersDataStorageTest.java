@@ -19,11 +19,9 @@ public class UsersDataStorageTest {
     }
 
     @Test // Test - говорит JUnit-у, что данный метод является методом-тестом
-
     public void testFind() throws Exception {
         User expected = new User(3, "ayazTheBest", "qwerty008", "Ayaz", 25);
         User actual = usersDataStorage.find(3);
-
         assertEquals(expected, actual);
     }
 
@@ -32,4 +30,38 @@ public class UsersDataStorageTest {
         usersDataStorage.find(34);
     }
 
+    // проверить на работоспособность
+    @Test
+    public void testSave() throws Exception {
+        User actual = new User(5, "ayazTheBest", "qwerty008", "Ayaz", 25);
+        idToFind = usersDataStorage.save(actual);
+        User expected = usersDataStorage.find(idToFind);
+        assertEquals(expected,actual);
+    }
+
+    // ???
+    @Test
+    public void testFindAll() throws Exception {
+
+    }
+
+    // Какой exception выдаст
+    @Test(expected = )
+    public void testDelete() throws Exception {
+        User actual = new User(6, "ayazTheBest", "qwerty008", "Ayaz", 25);
+        idToDelete = usersDataStorage.save(actual);
+        usersDataStorage.delete(idToDelete);
+        usersDataStorage.find(idToDelete);
+    }
+
+    // проверить на работоспособность
+    @Test
+    public void testUpdate() throws Exception {
+        User someone = new User(7, "ayazTheBest", "qwerty008", "Ayaz", 25);
+        idToUpdate = usersDataStorage.save(someone);
+        User expected = new User(7, "someone", "password", "name", 20);
+        usersDataStorage.update(expected);
+        User actual = usersDataStorage.find(idToUpdate);
+        assertEquals(expected, actual);
+    }
 }
