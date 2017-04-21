@@ -1,4 +1,4 @@
-package ru.itis;
+package ru.itis.list;
 
 /**
  * 20.04.2017
@@ -49,4 +49,12 @@ public interface List<T> {
     int indexOf(T element);
 
     void addToBegin(T element);
+
+    /**
+     * распечатать лист
+     * @renurn void
+     * */
+    void print();
+
+    void addToIndex(int index,T element);
 }
