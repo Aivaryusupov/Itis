@@ -19,13 +19,13 @@ public class Main {
         try {
             connection = DriverManager
                     .getConnection("jdbc:postgresql://localhost:5432/itis",
-                            "postgres", "qwerty007");
+                            "postgres", "1234");
 
             Statement statement = connection.createStatement();
             // resultSet - указывает на начало результирующих строк
             // прежде, чем воспользоваться, нужно сдвинуть на начало
             ResultSet resultSet =
-                    statement.executeQuery("SELECT * FROM group_user");
+                    statement.executeQuery("SELECT * FROM auto");
 
             while (resultSet.next()) {
                 System.out.println(resultSet.getInt(1) + " " + resultSet.getString(2));
