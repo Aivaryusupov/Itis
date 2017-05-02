@@ -1,15 +1,52 @@
 package ru.itis.main.models;
 
-public class Auto {
+/**
+ * Created by Аюпов Аяз on 28.04.2017.
+ */
+public class Auto implements Model{
     private int id;
     private String model;
     private String color;
-    private int mileage;
+    private double carMileage;
+    private boolean used;
+    private int idOwner;
 
-    public Auto(String model, String color, int mileage) {
+    public Auto(int id, String model, String color, double carMileage, boolean used, int idOwner) {
+        this.id = id;
         this.model = model;
         this.color = color;
-        this.mileage = mileage;
+        this.carMileage = carMileage;
+        this.used = used;
+        this.idOwner = idOwner;
+    }
+
+    public Auto(int id, String model, String color, double carMileage, boolean used, User user) {
+        this.id = id;
+        this.model = model;
+        this.color = color;
+        this.carMileage = carMileage;
+        this.used = used;
+        this.idOwner = user.getId();
+    }
+
+    public Auto(String model, String color, double carMileage, boolean used, User user) {
+        this.model = model;
+        this.color = color;
+        this.carMileage = carMileage;
+        this.used = used;
+        this.idOwner = user.getId();
+    }
+
+    public int getIdOwner() {
+        return idOwner;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getId() {
@@ -24,30 +61,24 @@ public class Auto {
         return color;
     }
 
-    public int getMileage() {
-        return mileage;
+    public double getCarMileage() {
+        return carMileage;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public void setMileage(int mileage) {
-        this.mileage = mileage;
-    }
-
+    @Override
     public String toString() {
-        return this.id + " " +
-                this.model + " " +
-                this.color + " " +
-                this.mileage;
+        return id+" "+model+" "+color+" "+carMileage+" "+used+" "+idOwner;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj != null && obj instanceof Auto){
+            Auto that = (Auto)obj;
+            return this.id == that.id
+                    && this.model.equals(that.model)
+                    && this.color.equals(that.color)
+                    && this.carMileage == that.carMileage
+                    && this.used == that.used;
+        }return false;
     }
 }
