@@ -6,7 +6,7 @@ import java.io.*;
  * Created by Аюпов Аяз on 28.04.2017.
  */
 public class SimpleIdGenerator implements IdGenerator {
-        // имя файла, в котором лежит последний
+    // имя файла, в котором лежит последний
     // сгенерированный id
     private String idFileName;
 
@@ -21,8 +21,8 @@ public class SimpleIdGenerator implements IdGenerator {
                     = new BufferedReader(
                     new FileReader(idFileName));
             String id = reader.readLine();
-           lastGeneratedId = Integer.parseInt(id);
-           reader.close();
+            lastGeneratedId = Integer.parseInt(id);
+            reader.close();
         } catch (FileNotFoundException e) {
             System.err.println("File not found");
         } catch (IOException e) {
@@ -34,6 +34,7 @@ public class SimpleIdGenerator implements IdGenerator {
     /**
      * Генерирует новый id,всегда уникальный
      * и всегда на один больше, чем последний сгенерированный
+     *
      * @return сгенерированный идентификатор
      */
 
@@ -41,11 +42,11 @@ public class SimpleIdGenerator implements IdGenerator {
     @Override
     public int generateId() {
         //TODO: У нас возникает проблема генерации для UserId и AutoId. Подумать над реализацией!
-       int newId = lastGeneratedId + 1;
-       lastGeneratedId = newId;
+        int newId = lastGeneratedId + 1;
+        lastGeneratedId = newId;
         try {
             Writer writer = new FileWriter(idFileName);
-            writer.write(newId+"");
+            writer.write(newId + "");
             writer.close();
             return newId;
         } catch (IOException e) {
