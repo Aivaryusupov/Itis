@@ -25,10 +25,12 @@ public class Main {
             // resultSet - указывает на начало результирующих строк
             // прежде, чем воспользоваться, нужно сдвинуть на начало
             ResultSet resultSet =
-                    statement.executeQuery("SELECT * FROM auto");
+                    statement.executeQuery("SELECT * FROM group_user");
 
             while (resultSet.next()) {
-                System.out.println(resultSet.getInt(1) + " " + resultSet.getString(2));
+                System.out.println(resultSet.getInt(1) + " " + resultSet.getString(2)
+                        + " " + resultSet.getString(3) + " " + resultSet.getString(4)
+                        + " " + resultSet.getInt(5));
             }
         } catch (SQLException e) {
             throw new IllegalArgumentException(e);
