@@ -9,36 +9,57 @@ public class Auto implements Model{
     private String color;
     private double carMileage;
     private boolean used;
-    private int idOwner;
+    private int owner;
 
-    public Auto(int id, String model, String color, double carMileage, boolean used, int idOwner) {
-        this.id = id;
-        this.model = model;
-        this.color = color;
-        this.carMileage = carMileage;
-        this.used = used;
-        this.idOwner = idOwner;
+    private Auto(Builder builder) {
+        this.id = builder.id;
+        this.model = builder.model;
+        this.color = builder.color;
+        this.carMileage = builder.carMileage;
+        this.used = builder.used;
+        this.owner = builder.owner;
     }
 
-    public Auto(int id, String model, String color, double carMileage, boolean used, User user) {
-        this.id = id;
-        this.model = model;
-        this.color = color;
-        this.carMileage = carMileage;
-        this.used = used;
-        this.idOwner = user.getId();
+    public static class Builder{
+        private int id;
+        private String model;
+        private String color;
+        private double carMileage;
+        private boolean used;
+        private int owner;
+
+        public Builder id(int id){
+            this.id = id;
+            return this;
+        }
+        public Builder model(String model){
+            this.model = model;
+            return this;
+        }
+        public Builder color(String color){
+            this.color = color;
+            return this;
+        }
+        public Builder carMileage(Double carMileage){
+            this.carMileage = carMileage;
+            return this;
+        }
+        public Builder used(Boolean used){
+            this.used = used;
+            return this;
+        }
+        public Builder idOwner(int owner){
+            this.owner = owner;
+            return this;
+        }
+        public Auto build(){
+            return new Auto(this);
+        }
+
     }
 
-    public Auto(String model, String color, double carMileage, boolean used, User user) {
-        this.model = model;
-        this.color = color;
-        this.carMileage = carMileage;
-        this.used = used;
-        this.idOwner = user.getId();
-    }
-
-    public int getIdOwner() {
-        return idOwner;
+    public int getOwner() {
+        return owner;
     }
 
     public boolean isUsed() {
@@ -67,18 +88,20 @@ public class Auto implements Model{
 
     @Override
     public String toString() {
-        return id+" "+model+" "+color+" "+carMileage+" "+used+" "+idOwner;
+        return id+" "+model+" "+color+" "+carMileage+" "+used+" "+owner;
     }
 
     @Override
     public boolean equals(Object obj) {
         if(obj != null && obj instanceof Auto){
             Auto that = (Auto)obj;
+            if(this == that) {return true;}
             return this.id == that.id
                     && this.model.equals(that.model)
                     && this.color.equals(that.color)
                     && this.carMileage == that.carMileage
-                    && this.used == that.used;
+                    && this.used == that.used
+                    && this.owner == that.owner;
         }return false;
     }
 }

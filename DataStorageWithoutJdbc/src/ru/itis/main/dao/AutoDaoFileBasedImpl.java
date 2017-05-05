@@ -49,32 +49,17 @@ public class AutoDaoFileBasedImpl implements AutoDao {
 
     @Override
     public int save(Auto auto) {
-        String query = "INSERT INTO auto (model, color, carmileage, used, owner_id) VALUES ('"
-                + auto.getModel() + "','"
-                + auto.getColor() + "',"
-                + auto.getCarMileage() + ","
-                + auto.isUsed() + ","
-                + auto.getIdOwner() + ");";
-        return template.save(query);
+        return template.save(fileName, auto);
     }
 
     @Override
     public void delete(int id) {
-        String query = "DELETE FROM auto WHERE id=" + id + ";";
-        template.sqlQuery(query);
+        template.deleteByValue(fileName, 0, id);
     }
 
     @Override
     public void update(Auto auto) {
-        String query = "UPDATE  auto SET" +
-                " model ='" + auto.getModel() + "',"
-                + " color ='" + auto.getColor() + "',"
-                + " carmileage =" + auto.getCarMileage() + ","
-                + " used =" + auto.isUsed() + ","
-                + " owner_id =" + auto.getIdOwner()
-                + " WHERE id =" + auto.getId() + ";";
-        template.update(query);
-
+        template.update(fileName, auto);
     }
 
     @Override

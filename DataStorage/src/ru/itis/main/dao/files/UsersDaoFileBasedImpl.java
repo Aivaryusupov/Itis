@@ -1,14 +1,18 @@
-package ru.itis.main.dao;
+package ru.itis.main.dao.files;
 
+import ru.itis.main.dao.UsersDao;
 import ru.itis.main.exception.UserNotFoundException;
 import ru.itis.main.generators.SimpleIdGenerator;
 import ru.itis.main.mapper.RowMapper;
+import ru.itis.main.models.Auto;
 import ru.itis.main.models.User;
 import ru.itis.main.utils.FileDaoQueryTemplate;
 import ru.itis.main.utils.FileDaoQueryTemplateImpl;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 public class UsersDaoFileBasedImpl implements UsersDao {
@@ -21,28 +25,32 @@ public class UsersDaoFileBasedImpl implements UsersDao {
         this.template = template;
     }
 
+    private Map<Integer,User>  usersMap;
+
     private RowMapper<User> userRowMapper = new RowMapper<User>(){
+
 
         @Override
         public User mapRow(String row) {
             String rowAsArray[] = row.split(" ");
-            User user = new User(Integer.parseInt(rowAsArray[0]),
-                                rowAsArray[1],
-                                rowAsArray[2],
-                                rowAsArray[3],
-                                Integer.parseInt(rowAsArray[4]));
+            User user = new User.Builder()
+                    .id(Integer.parseInt(rowAsArray[0]))
+                    .login(rowAsArray[1])
+                    .password(rowAsArray[2])
+                    .name(rowAsArray[3])
+                    .age(Integer.parseInt(rowAsArray[4]))
+                    .autos(new ArrayList<Auto>())
+                    .build();
+            if(usersMap!=null){
+                usersMap.put(user.getId(),user);
+            }
             return user;
         }
     };
 
     @Override
     public int save(User user) {
-      String query = "INSERT INTO group_user (login, password, name, age) VALUES ('"
-              +user.getLogin()+"','"
-              +user.getPassword()+"','"
-              +user.getName()+"',"
-              +user.getAge()+");";
-        return template.save(query);
+      return template.save(fileName,user);
     }
 
     // поиск объекта по id
@@ -61,19 +69,12 @@ public class UsersDaoFileBasedImpl implements UsersDao {
 
     @Override
     public void delete(int id) {
-        String query = "DELETE FROM group_user WHERE id="+id+";";
-        template.sqlQuery(query);
+        template.deleteByValue(fileName,0,id);
     }
 
     @Override
-    public void update(User user) {
-        String query = "UPDATE  group_user SET" +
-                " login ='"+user.getLogin()+"',"
-                +" password ='"+user.getPassword()+"',"
-                + " name ='"+user.getName()+"',"
-                + " age ="+user.getAge()
-                +"WHERE id ="+user.getId()+";";
-        template.update(query);
+    public void update(User model) {
+        template.update(fileName,model);
     }
 
     @Override

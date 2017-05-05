@@ -2,9 +2,6 @@ package ru.itis.main.dao;
 
 import java.util.List;
 
-/**
- * Created by Аюпов Аяз on 28.04.2017.
- */
 public interface BaseCrudDao<T> {
     T find(int id);
     int save(T model);
@@ -12,5 +9,23 @@ public interface BaseCrudDao<T> {
     void update(T model);
 
     List<T> findAll();
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

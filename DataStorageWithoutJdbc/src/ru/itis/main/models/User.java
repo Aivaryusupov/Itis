@@ -2,10 +2,8 @@ package ru.itis.main.models;
 
 import java.util.List;
 
-/**
- * Created by Аюпов Аяз on 28.04.2017.
- */
 public class User implements Model {
+
     private int id;
     private String login;
     private String password;
@@ -13,7 +11,11 @@ public class User implements Model {
     private int age;
     private List<Auto> autos;
 
+    /**
+     * Статический класс - реализация паттерна Builder
+     */
     public static class Builder {
+        // дублируем все поля обрамляющего класса
         private int id;
         private String login;
         private String password;
@@ -21,9 +23,13 @@ public class User implements Model {
         private int age;
         private List<Auto> autos;
 
+        // пустой конструктор
         public Builder() {
+
         }
 
+        // метод принимающий на вход значение поля и возвращающий самого себя
+        // но уже с заданным значением поля
         public Builder id(int id) {
             this.id = id;
             return this;
@@ -57,16 +63,35 @@ public class User implements Model {
         public User build() {
             return new User(this);
         }
-
     }
 
     private User(Builder builder) {
         this.id = builder.id;
         this.login = builder.login;
         this.password = builder.password;
-        this.name = builder.name;
         this.age = builder.age;
+        this.name = builder.name;
         this.autos = builder.autos;
+    }
+
+
+    @Override
+    public String toString() {
+        return  id +" "
+                + login +" "
+                + password +" "
+                + name +" "
+                + age;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 
     public String getLogin() {
@@ -85,39 +110,21 @@ public class User implements Model {
         return age;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
     public List<Auto> getAutos() {
         return autos;
     }
 
     @Override
-    public String toString() {
-        return id + " "
-                + login + " "
-                + password + " "
-                + name + " "
-                + age;
-    }
-
-    @Override
     public boolean equals(Object obj) {
-        if (obj != null && obj instanceof User) {
-            User that = (User) obj;
-            if(that == this){return true;}
+        if(obj !=null && obj instanceof User){
+            User that = (User)obj;
             return this.id == that.id
                     && this.login.equals(that.login)
                     && this.password.equals(that.password)
                     && this.name.equals(that.name)
-                    && this.age == that.age;
-        }
-        return false;
+                    && this.age == that.age
+                    && this.autos.equals(that.autos);
+        } return false;
     }
 }
 
