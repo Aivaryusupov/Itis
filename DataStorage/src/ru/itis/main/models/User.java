@@ -2,9 +2,7 @@ package ru.itis.main.models;
 
 import java.util.List;
 
-/**
- * Created by Аюпов Аяз on 28.04.2017.
- */
+
 public class User implements Model {
     private int id;
     private String login;

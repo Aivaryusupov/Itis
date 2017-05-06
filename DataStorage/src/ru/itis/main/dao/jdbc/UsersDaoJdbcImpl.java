@@ -5,16 +5,13 @@ import ru.itis.main.dao.UsersDao;
 import ru.itis.main.models.Auto;
 import ru.itis.main.models.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UsersDaoJdbcImpl implements UsersDao{
+public class UsersDaoJdbcImpl implements UsersDao {
 
     private Connection connection;
 
@@ -48,7 +45,7 @@ public class UsersDaoJdbcImpl implements UsersDao{
     public User find(int id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USER_BY_ID);
-            preparedStatement.setInt(1,id);
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             User user = new User.Builder()
@@ -67,14 +64,32 @@ public class UsersDaoJdbcImpl implements UsersDao{
 
     @Override
     public int save(User model) {
-        return 0;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_USER, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, model.getLogin());
+            preparedStatement.setString(2, model.getPassword());
+            preparedStatement.setString(3, model.getName());
+            preparedStatement.setInt(4, model.getAge());
+
+            int addRowsCount = preparedStatement.executeUpdate();
+
+            if(addRowsCount == 0){
+                throw new IllegalArgumentException("not insert user in sql");
+            }
+
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            generatedKeys.next();
+            return generatedKeys.getInt(1);
+        } catch (SQLException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     @Override
     public void delete(int id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_USER_BY_ID);
-            preparedStatement.setInt(1,id);
+            preparedStatement.setInt(1, id);
             preparedStatement.execute();
 
         } catch (SQLException e) {
@@ -87,11 +102,11 @@ public class UsersDaoJdbcImpl implements UsersDao{
     public void update(User model) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_BY_ID);
-            preparedStatement.setString(1,model.getLogin());
-            preparedStatement.setString(2,model.getPassword());
-            preparedStatement.setString(3,model.getName());
-            preparedStatement.setInt(4,model.getAge());
-            preparedStatement.setInt(5,model.getId());
+            preparedStatement.setString(1, model.getLogin());
+            preparedStatement.setString(2, model.getPassword());
+            preparedStatement.setString(3, model.getName());
+            preparedStatement.setInt(4, model.getAge());
+            preparedStatement.setInt(5, model.getId());
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,18 +118,19 @@ public class UsersDaoJdbcImpl implements UsersDao{
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ALL_USERS_JOIN);
             ResultSet result = preparedStatement.executeQuery();
-            Map<Integer,User> usersMap = new HashMap<>();
-            while(result.next()){
+            Map<Integer, User> usersMap = new HashMap<>();
+            while (result.next()) {
                 int userId = result.getInt(1);
-                if(usersMap.get(userId) == null){
+                if (usersMap.get(userId) == null) {
                     User user = new User.Builder()
                             .id(result.getInt(1))
                             .login(result.getString("login"))
                             .password(result.getString("password"))
                             .name(result.getString("name"))
                             .age(result.getInt("age"))
+                            .autos(new ArrayList<>())
                             .build();
-                    usersMap.put(user.getId(),user);
+                    usersMap.put(user.getId(), user);
                 }
                 Auto auto = new Auto.Builder()
                         .id(result.getInt(6))
@@ -137,10 +153,10 @@ public class UsersDaoJdbcImpl implements UsersDao{
         try {
             ArrayList<User> users = new ArrayList<>();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_AGE);
-            preparedStatement.setInt(1,age);
+            preparedStatement.setInt(1, age);
             ResultSet result = preparedStatement.executeQuery();
 
-            while(result.next()){
+            while (result.next()) {
                 User currentUser = new User.Builder()
                         .id(result.getInt("id"))
                         .login(result.getString("login"))
@@ -159,11 +175,11 @@ public class UsersDaoJdbcImpl implements UsersDao{
     @Override
     public List<User> findAllByName(String name) {
         try {
-            List<User> users =new ArrayList<>();
+            List<User> users = new ArrayList<>();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_NAME);
-            preparedStatement.setString(1,name);
+            preparedStatement.setString(1, name);
             ResultSet result = preparedStatement.executeQuery();
-            while(result.next()){
+            while (result.next()) {
                 User currentUser = new User.Builder()
                         .id(result.getInt("id"))
                         .login(result.getString("login"))
@@ -175,7 +191,7 @@ public class UsersDaoJdbcImpl implements UsersDao{
             }
             return users;
         } catch (SQLException e) {
-           throw new IllegalArgumentException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 }
